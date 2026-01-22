@@ -1,0 +1,1 @@
+for i in {1..1000}; do echo "./eq2eval.sh $i > /dev/null" > job$i.sh ; chmod +x job$i.sh; qsub -cwd -pe dummy 4 -q big@compute-0-22.local -q big@compute-0-23.local -q big@compute-0-33.local -q big@compute-0-34.local -q big@compute-0-42.local job$i.sh ; done

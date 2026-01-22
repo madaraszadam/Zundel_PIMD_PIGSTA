@@ -1,0 +1,97 @@
+&GLOBAL
+  PROJECT Zundel_cation_PIMD
+  RUN_TYPE                   PINT
+  PRINT_LEVEL                SILENT
+&END GLOBAL
+&MOTION
+  &PINT
+     P  NUMBER_OF_BEADS
+    NUM_STEPS                40000
+    DT                       0.25
+    NRESPA                   2    #produces an intended warning.
+    TEMP                     1.67
+    TRANSFORMATION           NORMAL
+    PROPAGATOR               RPMD
+    HARM_INT                 EXACT
+    &NORMALMODE
+      MODEFACTOR             1.0
+      Q_BEAD                -1.0
+      Q_CENTROID            -1.0
+    &END NORMALMODE
+    &PILE
+      TAU                   1000
+      LAMBDA                0.5
+    &END PILE
+    &INIT
+      RANDOMIZE_POS          F
+      CENTROID_SPEED         F
+      VELOCITY_QUENCH .TRUE.
+      THERMOSTAT_SEED 1
+    &END INIT
+    &PRINT
+      &CENTROID_GYR          ON
+        &EACH
+          PINT 400
+        &END
+      &END CENTROID_GYR
+      &CENTROID_POS          ON
+        &EACH
+          PINT 400
+        &END
+      &END CENTROID_POS
+      &ENERGY          ON
+        &EACH
+          PINT 400
+        &END
+      &END ENERGY
+    &END PRINT
+  &END PINT
+  &PRINT
+    &RESTART          ON
+      &EACH
+        PINT 400
+      &END
+    &END RESTART
+    &RESTART_HISTORY          OFF
+    &END RESTART_HISTORY
+    &TRAJECTORY ON
+#      FORMAT ATOMIC
+#      UNIT bohr
+      &EACH
+        PINT 400
+      &END
+    &END TRAJECTORY
+    &VELOCITIES OFF
+      FORMAT ATOMIC
+      &EACH
+        PINT 400
+      &END
+    &END VELOCITIES
+     &FORCES  OFF
+       FORMAT  XMOL
+       &EACH
+         PINT  400
+       &END EACH
+     &END FORCES
+  &END PRINT
+&END MOTION
+&FORCE_EVAL
+  METHOD  NNP
+  &NNP
+    NNP_INPUT_FILE_NAME NNP/prot-water-nnp/input.nn
+    SCALE_FILE_NAME     NNP/prot-water-nnp/scaling.data
+    &MODEL
+       WEIGHTS          NNP/prot-water-nnp/weights
+    &END MODEL
+  &END NNP
+  &SUBSYS
+    &CELL
+      ABC 10.0 10.0 10.0
+      PERIODIC XYZ
+    &END CELL
+    &TOPOLOGY
+      COORD_FILE_NAME ./opt_geom.xyz
+      COORD_FILE_FORMAT XYZ
+    &END TOPOLOGY
+  &END SUBSYS
+&END FORCE_EVAL

@@ -1,0 +1,116 @@
+ # Version information for this restart file 
+ # current date 2023-08-04 17:36:25.504
+ # current working dir /state/partition1/madarasz/home/madarasz/simulations/CP2K/Zundel_cation/PIMD/PILE/T1.67K/P4/SEED1/prodrun1
+ # Program compiled at                           Mon 09 Jan 2023 02:43:42 PM CET
+ # Program compiled on                                            mpc3071.psi.ch
+ # Program compiled for                                  Linux-gnu-x86_64-static
+ # Source code revision number                                       git:b888bd8
+ &GLOBAL
+   PRINT_LEVEL  SILENT
+   PROJECT_NAME recalc_filt
+   RUN_TYPE  PINT
+ &END GLOBAL
+ &MOTION
+   &PINT
+     P  NUMBER_OF_BEADS
+     NUM_STEPS  0
+     ITERATION  400026
+     TEMP     1.67E+00
+     DT     2.5E-01
+     HARM_INT  EXACT
+     NRESPA  2
+     TRANSFORMATION  NORMAL
+     PROPAGATOR  RPMD
+     &NORMALMODE
+       Q_CENTROID    -1.0000000000000000E+00
+       Q_BEAD    -1.0000000000000000E+00
+       MODEFACTOR     1.0000000000000000E+00
+     &END NORMALMODE
+     &BEADS
+       &COORD
+       @INCLUDE 'bead_pos.xyz'
+       &END COORD
+       &VELOCITY
+       @INCLUDE 'bead_vel.xyz'
+       &END VELOCITY
+     &END BEADS
+     &PILE
+       TAU     9.9999999999999966E+02
+       LAMBDA     5.0000000000000000E-01
+       THERMOSTAT_ENERGY    -1.5554515552328740E-03
+       &RNG_INIT
+pile_rng_gaussian                        1 F T F   2.0677199481611424E+00         104401424.0         719130377.0        4068695629.0         863728213.0        2129420782.0        4135148822.0                 1.0                 1.0                 1.0                 1.0                 1.0                 1.0                 1.0                 1.0                 1.0                 1.0                 1.0                 1.0
+       &END RNG_INIT
+     &END PILE
+     &INIT
+       THERMOSTAT_SEED  1
+       RANDOMIZE_POS  F
+       CENTROID_SPEED  F
+       VELOCITY_QUENCH  T
+     &END INIT
+     &PRINT
+       &ENERGY  ON
+         &EACH
+           PINT  1
+         &END EACH
+       &END ENERGY
+       &CENTROID_POS  ON
+         &EACH
+           PINT  1
+         &END EACH
+       &END CENTROID_POS
+       &CENTROID_GYR  ON
+         &EACH
+           PINT  1
+         &END EACH
+       &END CENTROID_GYR
+     &END PRINT
+   &END PINT
+   &PRINT
+     &TRAJECTORY  ON
+       &EACH
+         PINT  1
+       &END EACH
+     &END TRAJECTORY
+     &VELOCITIES  ON
+       FORMAT  XMOL
+       &EACH
+         PINT  1
+       &END EACH
+     &END VELOCITIES
+     &FORCES  ON
+       FORMAT  XMOL
+       &EACH
+         PINT  1
+       &END EACH
+     &END FORCES
+     &RESTART  ON
+       &EACH
+         PINT  1
+       &END EACH
+     &END RESTART
+     &RESTART_HISTORY  OFF
+     &END RESTART_HISTORY
+   &END PRINT
+ &END MOTION
+ &FORCE_EVAL
+   METHOD  NNP
+   &NNP
+     NNP_INPUT_FILE_NAME NNP/prot-water-nnp/input.nn
+     SCALE_FILE_NAME NNP/prot-water-nnp/scaling.data
+     &MODEL
+       WEIGHTS NNP/prot-water-nnp/weights
+     &END MODEL
+   &END NNP
+   &SUBSYS
+     &CELL
+       ABC     1.0000000000000004E+01    1.0000000000000004E+01    1.0000000000000004E+01
+       PERIODIC  XYZ
+     &END CELL
+     &TOPOLOGY
+       COORD_FILE_NAME ./opt_geom.xyz
+       COORD_FILE_FORMAT  XYZ
+       NUMBER_OF_ATOMS  7
+     &END TOPOLOGY
+   &END SUBSYS
+ &END FORCE_EVAL
